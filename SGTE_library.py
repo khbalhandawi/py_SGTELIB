@@ -21,9 +21,6 @@ class SGTE_server():
         
         import time, os
         
-        # Remove ALL flag files
-        self.system_command('@echo off && for /r %F in (flag_*) do del "%~nF"');
-        
         varargin = args
         nargin = len(varargin) # 1 mandatory arguments (model) 
         
@@ -106,7 +103,7 @@ class SGTE_server():
             fid.write(';\n');
         
         fid.write('];');
-        fid.close()
+        fid.close
 
     def sgtelib_server_wait_file(self,name,*args): # wait_tmax
 
@@ -152,7 +149,7 @@ class SGTE_server():
         self.sgtelib_server_write_matrix(X,'X','flag_predict_create');
         
         # Create flag
-        # self.system_command('copy flag_predict_create debug'); for debugging
+        self.system_command('copy flag_predict_create debug');
         self.system_command('move flag_predict_create flag_predict_transmit');
         
         # Wait for reception flag
@@ -225,14 +222,12 @@ class SGTE_server():
         return M
         
     def sgtelib_server_read_metric(self,file):
-        import numpy as np
         fileID = open(file,'r'); # Open file
         InputText = np.loadtxt(fileID,
                            delimiter = ' ',
                            dtype=np.str); # \n is the delimiter
         
         M = InputText[0:-1].astype('float')
-        fileID.close()
         
         return M
         
@@ -342,7 +337,7 @@ class SGTE_server():
             #     ready = fp.readline()
             #===================================================================
             self.system_command('del flag_pong');
-            # print('ping ok!');
+            print('ping ok!');
         else:
             print('=====================SGTELIB_SERVER ERROR==========================');
             print('sgtelib_server not responding');
@@ -351,19 +346,18 @@ class SGTE_server():
     #==============================================================================#
     # %% Execute system commands and return output to console
     def server_command(self,command):
-        import subprocess
+        import subprocess, sys
         from subprocess import PIPE,STDOUT
         DETACHED_PROCESS = 0x00000008
         CREATE_NO_WINDOW = 0x08000000
-        p = subprocess.Popen(command,shell=True, stdin=PIPE, stdout=PIPE, stderr=STDOUT,
-                             creationflags=DETACHED_PROCESS) # disable windows errors
+        p = subprocess.Popen(command,shell=True, stdin=PIPE, stdout=PIPE, stderr=STDOUT) # disable windows errors
         return p
         
     def system_command(self,command):
-        import subprocess
+        import subprocess, os
         CREATE_NO_WINDOW = 0x08000000
         
-        p = subprocess.call(command,shell=True, creationflags = CREATE_NO_WINDOW) # disable windows errors
+        p = subprocess.call(command,shell=True, creationflags =CREATE_NO_WINDOW) # disable windows errors
         
     def server_print(self,p):
         # print server output
@@ -395,7 +389,7 @@ if __name__ == "__main__":
 
     p = server.sgtelib_server_start()
     server.sgtelib_server_ping()
-    
+         
     server.sgtelib_server_newdata(X,Z)
     
     M = server.sgtelib_server_metric('OECV');
